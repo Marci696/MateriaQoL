@@ -1,39 +1,43 @@
-name: Sample PR Builder for SamplePlugin
+name: Sample PR Builder for MateriaQoL
 
 on:
-  pull_request:
+    pull_request:
+        branches: [ master ]
+push:
     branches: [ master ]
 
 jobs:
+    
+    build:
+        runs-on: windows-2022
+        
+        env:
+            Solution_Name: MateriaQoL
+        
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v5
+                with:
+                    submodules: recursive
 
-  build:
-    runs-on: windows-2022
+            -   name: Install .NET
+                uses: actions/setup-dotnet@v5
+                with:
+                    dotnet-version: 9.0.x
 
-    env:
-      Solution_Name: SamplePlugin
+            -   name: Download Dalamud
+                run: |
+                    Invoke-WebRequest -Uri https://goatcorp.github.io/dalamud-distrib/latest.zip -OutFile latest.zip
+                    Expand-Archive -Force latest.zip "$env:AppData\XIVLauncher\addon\Hooks\dev"
 
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v5
+            -   name: Build with dotnet
+                run: dotnet build --configuration Release
 
-    - name: Install .NET
-      uses: actions/setup-dotnet@v5
-      with:
-        dotnet-version: 9.0.x
-
-    - name: Download Dalamud
-      run: |
-        Invoke-WebRequest -Uri https://goatcorp.github.io/dalamud-distrib/latest.zip -OutFile latest.zip
-        Expand-Archive -Force latest.zip "$env:AppData\XIVLauncher\addon\Hooks\dev"
-
-    - name: Build with dotnet
-      run: dotnet build --configuration Release
-
-    - name: Store artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: SamplePlugin
-        path: .\SamplePlugin\bin\x64\Release\SamplePlugin\*
-        if-no-files-found: error
-        retention-days: 1
+            -   name: Store artifacts
+                uses: actions/upload-artifact@v4
+                with:
+                    name: MateriaQoL
+                    path: .\MateriaQoL\bin\x64\Release\MateriaQoL\*
+                    if-no-files-found: error
+                    retention-days: 1
 
