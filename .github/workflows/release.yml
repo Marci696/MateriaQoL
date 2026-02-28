@@ -62,6 +62,7 @@ jobs:
                     $json[0].AssemblyVersion = "${{ steps.ver.outputs.version }}"
                     $json[0].DownloadLinkInstall = "https://github.com/${{ github.repository }}/releases/download/latest/MateriaQoL.zip"
                     $json[0].DownloadLinkUpdate  = "https://github.com/${{ github.repository }}/releases/download/latest/MateriaQoL.zip"
+                    $json[0].LastUpdate = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds().ToString()
                     
                     $json | ConvertTo-Json -Depth 32 | Set-Content -Path $path -Encoding UTF8
 
