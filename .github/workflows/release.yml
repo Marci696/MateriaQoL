@@ -74,8 +74,7 @@ jobs:
                     git commit -m "Update repo.json for ${{ steps.ver.outputs.version }} [skip ci]" || exit 0
                     git push
 
-            -   name:
-                    Publish/Update GitHub Release (tag: latest)
+            -   name: "Publish/Update GitHub Release (tag: latest)"
                 uses: softprops/action-gh-release@v2
                 with:
                     tag_name: latest
