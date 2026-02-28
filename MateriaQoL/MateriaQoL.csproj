@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Dalamud.NET.Sdk/14.0.2">
+    <PropertyGroup>
+        <Version>0.0.0.1</Version>
+        <Author>Marci696</Author>
+        <Name>MateriaQoL</Name>
+        <InternalName>MateriaQoL</InternalName>
+        <Punchline>Some quality of life improvements for materia</Punchline>
+        <Description><![CDATA[Currently you can use it to retrieve all materia from a gear piece and also queue multiple in succession via an added context menu option on items.
+
+Especially helpful for penta melded gear, where you normally have to wait for each individual retriaval to finish.
+]]></Description>
+        <RepoUrl>https://github.com/Marci696/MateriaQoL</RepoUrl>
+        <RootNamespace>MateriaQoL</RootNamespace>
+        <Tags>Materia;Retrieval;QoL;Quality of Life</Tags>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Libs\KamiToolKit\KamiToolKit.csproj"/>
+    </ItemGroup>
+</Project>
