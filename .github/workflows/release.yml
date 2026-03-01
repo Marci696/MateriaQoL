@@ -75,7 +75,7 @@ jobs:
             -   name: Package zip
                 shell: pwsh
                 run: |
-                    $src = "MateriaQoL\MateriaQoL\bin\x64\Release\MateriaQoL\*"
+                    $src = "MateriaQoL\bin\x64\Release\MateriaQoL\*"
 
                     if (-not (Test-Path $src)) {
                         Write-Host "Packaging source not found: $src"
