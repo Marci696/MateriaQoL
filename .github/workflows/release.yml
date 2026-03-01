@@ -75,27 +75,23 @@ jobs:
             -   name: Package zip
                 shell: pwsh
                 run: |
-                    $outDir = "MateriaQoL\bin\x64\Release\MateriaQoL"
-                    $stage  = Join-Path $env:RUNNER_TEMP "package"
+                    $src = "MateriaQoL\MateriaQoL\bin\x64\Release\MateriaQoL\*"
 
-                    if (Test-Path $stage) { Remove-Item $stage -Recurse -Force }
-                    New-Item -ItemType Directory -Force -Path $stage | Out-Null
-
-                    Copy-Item -Path (Join-Path $outDir "*") -Destination $stage -Recurse -Force
-
-                    # Defensive: ensure no downloaded/latest.zip sneaks in
-                    Get-ChildItem -Path $stage -Recurse -Filter "latest.zip" -ErrorAction SilentlyContinue | Remove-Item -Force -ErrorAction SilentlyContinue
+                    if (-not (Test-Path $src)) {
+                        Write-Host "Packaging source not found: $src"
+                        Write-Host "Here are the Release outputs under the project:"
+                        Get-ChildItem -Path "MateriaQoL\MateriaQoL\bin\x64\Release" -Recurse -Force | Select-Object FullName
+                        throw "Build output folder not found; check output path."
+                    }
 
                     if (Test-Path "MateriaQoL.zip") { Remove-Item "MateriaQoL.zip" -Force }
-                    Compress-Archive -Path (Join-Path $stage "*") -DestinationPath "MateriaQoL.zip" -Force
+                    Compress-Archive -Path $src -DestinationPath "MateriaQoL.zip" -Force
 
             -   name: Update repo.json AssemblyVersion + links
                 shell: pwsh
                 run: |
                     $path = "repo.json"
 
-                    # Force an array even if the JSON has a single element, so ConvertTo-Json
-                    # emits `[...]` instead of `{...}`.
                     $json = @(Get-Content $path -Raw | ConvertFrom-Json)
 
                     $json[0].AssemblyVersion = "${{ steps.ver.outputs.version }}"
