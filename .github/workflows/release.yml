@@ -57,14 +57,18 @@ jobs:
                 shell: pwsh
                 run: |
                     $path = "repo.json"
-                    $json = Get-Content $path -Raw | ConvertFrom-Json
-                    
+
+                    # Force an array even if the JSON has a single element, so ConvertTo-Json
+                    # emits `[...]` instead of `{...}`.
+                    $json = @(Get-Content $path -Raw | ConvertFrom-Json)
+
                     $json[0].AssemblyVersion = "${{ steps.ver.outputs.version }}"
                     $json[0].DownloadLinkInstall = "https://github.com/${{ github.repository }}/releases/download/latest/MateriaQoL.zip"
                     $json[0].DownloadLinkUpdate  = "https://github.com/${{ github.repository }}/releases/download/latest/MateriaQoL.zip"
                     $json[0].LastUpdate = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds().ToString()
-                    
-                    $json | ConvertTo-Json -Depth 32 | Set-Content -Path $path -Encoding UTF8
+
+                    $outJson = ConvertTo-Json -Depth 32 -InputObject $json
+                    Set-Content -Path $path -Value $outJson -Encoding UTF8
 
             -   name: Commit repo.json
                 shell: pwsh
