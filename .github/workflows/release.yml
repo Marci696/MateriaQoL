@@ -27,15 +27,41 @@ jobs:
             -   name: Download Dalamud
                 shell: pwsh
                 run: |
-                    Invoke-WebRequest -Uri https://goatcorp.github.io/dalamud-distrib/latest.zip -OutFile latest.zip
-                    Expand-Archive -Force latest.zip "$env:AppData\XIVLauncher\addon\Hooks\dev"
+                    $tmp = Join-Path $env:RUNNER_TEMP "dalamud"
+                    New-Item -ItemType Directory -Force -Path $tmp | Out-Null
+
+                    $zipPath = Join-Path $tmp "latest.zip"
+                    Invoke-WebRequest -Uri https://goatcorp.github.io/dalamud-distrib/latest.zip -OutFile $zipPath
+                    Expand-Archive -Force $zipPath "$env:AppData\XIVLauncher\addon\Hooks\dev"
 
             -   name: Compute Version
                 id: ver
                 shell: pwsh
                 run: |
-                    $ver = "0.1.${{ github.run_number }}.0"
+                    $path = "repo.json"
+
+                    $runNumber = [int]("${{ github.run_number }}")
+
+                    $existingVersion = $null
+                    if (Test-Path $path) {
+                        $repoJson = Get-Content $path -Raw | ConvertFrom-Json
+                        if ($repoJson -is [System.Array]) {
+                            $existingVersion = $repoJson[0].AssemblyVersion
+                        } else {
+                            $existingVersion = $repoJson.AssemblyVersion
+                        }
+                    }
+
+                    $ver = $null
+                    if ($existingVersion -and ($existingVersion -match '^\d+\.\d+\.\d+\.\d+$')) {
+                        $parts = $existingVersion -split '\.'
+                        $ver = "$($parts[0]).$($parts[1]).$($parts[2]).$runNumber"
+                    } else {
+                        throw "Cannot compute version: repo.json is missing or AssemblyVersion '$existingVersion' is not in 'A.B.C.D' numeric format."
+                    }
+
                     "version=$ver" >> $env:GITHUB_OUTPUT
+                    Write-Host "Existing version: $existingVersion"
                     Write-Host "Version: $ver"
 
             -   name: Build (Release)
@@ -49,9 +75,19 @@ jobs:
             -   name: Package zip
                 shell: pwsh
                 run: |
-                    $src = "MateriaQoL\bin\x64\Release\MateriaQoL\*"
+                    $outDir = "MateriaQoL\bin\x64\Release\MateriaQoL"
+                    $stage  = Join-Path $env:RUNNER_TEMP "package"
+
+                    if (Test-Path $stage) { Remove-Item $stage -Recurse -Force }
+                    New-Item -ItemType Directory -Force -Path $stage | Out-Null
+
+                    Copy-Item -Path (Join-Path $outDir "*") -Destination $stage -Recurse -Force
+
+                    # Defensive: ensure no downloaded/latest.zip sneaks in
+                    Get-ChildItem -Path $stage -Recurse -Filter "latest.zip" -ErrorAction SilentlyContinue | Remove-Item -Force -ErrorAction SilentlyContinue
+
                     if (Test-Path "MateriaQoL.zip") { Remove-Item "MateriaQoL.zip" -Force }
-                    Compress-Archive -Path $src -DestinationPath "MateriaQoL.zip" -Force
+                    Compress-Archive -Path (Join-Path $stage "*") -DestinationPath "MateriaQoL.zip" -Force
 
             -   name: Update repo.json AssemblyVersion + links
                 shell: pwsh
