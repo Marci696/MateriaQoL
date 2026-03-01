@@ -12,7 +12,7 @@
       "QoL",
       "Quality of Life"
     ],
-    "AssemblyVersion": "0.1.6.9",
+    "AssemblyVersion": "0.1.6.10",
     "TestingAssemblyVersion": null,
     "ApplicableVersion": "any",
     "DalamudApiLevel": 14,
@@ -20,6 +20,6 @@
     "IsTestingExclusive": false,
     "DownloadLinkInstall": "https://github.com/Marci696/MateriaQoL/releases/download/latest/MateriaQoL.zip",
     "DownloadLinkUpdate": "https://github.com/Marci696/MateriaQoL/releases/download/latest/MateriaQoL.zip",
-    "LastUpdate": "1772325305"
+    "LastUpdate": "1772326011"
   }
 ]
