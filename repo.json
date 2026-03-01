@@ -1,25 +1,25 @@
 [
-    {
-        "Name": "MateriaQoL",
-        "InternalName": "MateriaQoL",
-        "Author": "Marci696",
-        "Punchline": "Some quality of life improvements for materia",
-        "Description": "Currently you can use it to retrieve all materia from a gear piece and also queue multiple in succession via an added context menu option on items.\n\nEspecially helpful for penta melded gear, where you normally have to wait for each individual retrieval to finish.",
-        "RepoUrl": "https://github.com/Marci696/MateriaQoL",
-        "Tags": [
-            "Materia",
-            "Retrieval",
-            "QoL",
-            "Quality of Life"
-        ],
-        "AssemblyVersion": "0.2.0.0",
-        "TestingAssemblyVersion": null,
-        "ApplicableVersion": "any",
-        "DalamudApiLevel": 14,
-        "IsHide": false,
-        "IsTestingExclusive": false,
-        "DownloadLinkInstall": "https://github.com/Marci696/MateriaQoL/releases/download/latest/MateriaQoL.zip",
-        "DownloadLinkUpdate": "https://github.com/Marci696/MateriaQoL/releases/download/latest/MateriaQoL.zip",
-        "LastUpdate": "1772322554"
-    }
+  {
+    "Name": "MateriaQoL",
+    "InternalName": "MateriaQoL",
+    "Author": "Marci696",
+    "Punchline": "Some quality of life improvements for materia",
+    "Description": "Currently you can use it to retrieve all materia from a gear piece and also queue multiple in succession via an added context menu option on items.\n\nEspecially helpful for penta melded gear, where you normally have to wait for each individual retrieval to finish.",
+    "RepoUrl": "https://github.com/Marci696/MateriaQoL",
+    "Tags": [
+      "Materia",
+      "Retrieval",
+      "QoL",
+      "Quality of Life"
+    ],
+    "AssemblyVersion": "0.1.6.0",
+    "TestingAssemblyVersion": null,
+    "ApplicableVersion": "any",
+    "DalamudApiLevel": 14,
+    "IsHide": false,
+    "IsTestingExclusive": false,
+    "DownloadLinkInstall": "https://github.com/Marci696/MateriaQoL/releases/download/latest/MateriaQoL.zip",
+    "DownloadLinkUpdate": "https://github.com/Marci696/MateriaQoL/releases/download/latest/MateriaQoL.zip",
+    "LastUpdate": "1772323400"
+  }
 ]
